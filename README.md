@@ -6,7 +6,7 @@ Hear, Hear. For those crypto developer enthusiasts looking to integrate with our
 
 ## Environment
 
-To get started, download this repo and upload the `Wyre V3 API Collection.postman_collections.js` file to Postman.
+To get started, download this repo and upload the `Wyre V3 API Collection.postman_collections.json` file to Postman.
 
 ![import_collections](https://media.giphy.com/media/5z5Z9IxUP5QeMtMK9Z/giphy.gif)
 
@@ -24,12 +24,12 @@ Once you have those three items, you'll need to set environment variables to use
 
 Below are the environment variable names you'll need to enter to use the Postman scripts. The variable name are case sensitive.
 
-| **Environment Variable Name** | **Environment Variable Value**          | **Explanation**                                                                    |
-| ----------------------------- | --------------------------------------- | ---------------------------------------------------------------------------------- |
-| WYRE_APIKEY                   | Your Api Key                            | [Authentication](https://docs.sendwyre.com/docs/authentication)                    |
-| WYRE_TOKEN                    | Your Secret Token                       | [Authentication](https://docs.sendwyre.com/docs/authentication)                    |
-| ACCOUNT_ID                    | Your Account ID                         |
-| publicToken                   | Your public token (Leave blank for now) | [Connect a Bank Account](https://docs.sendwyre.com/docs/create-ach-payment-method) |
+| **Environment Variable Name** | **Environment Variable Value**             | **Explanation**                                                                    |
+| ----------------------------- | ------------------------------------------ | ---------------------------------------------------------------------------------- |
+| WYRE_APIKEY                   | Your Api Key                               | [Authentication](https://docs.sendwyre.com/docs/authentication)                    |
+| WYRE_TOKEN                    | Your Secret Token                          | [Authentication](https://docs.sendwyre.com/docs/authentication)                    |
+| ACCOUNT_ID                    | Your Account ID                            |
+| publicToken                   | Your public token (Insert an Empty String) | [Connect a Bank Account](https://docs.sendwyre.com/docs/create-ach-payment-method) |
 
 ## Getting Started
 
