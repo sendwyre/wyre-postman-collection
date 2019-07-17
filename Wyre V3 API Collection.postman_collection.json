@@ -10,6 +10,7 @@
 			"name": "Key Management",
 			"item": [
 				{
+<<<<<<< HEAD
 					"name": "POST Submit Auth Token",
 					"event": [
 						{
@@ -87,6 +88,8 @@
 					"response": []
 				},
 				{
+=======
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
 					"name": "POST create an API key",
 					"event": [
 						{
@@ -738,6 +741,8 @@
 				},
 				{
 					"name": "ACH - Create Payment Method Wire Transfer",
+<<<<<<< HEAD
+=======
 					"event": [
 						{
 							"listen": "prerequest",
@@ -810,6 +815,106 @@
 							"mode": "raw",
 							"raw": "{\"paymentMethodType\":\"INTERNATIONAL_TRANSFER\",\"country\":\"US\",\"currency\":\"USD\",\"beneficiaryType\":\"INDIVIDUAL\",\"beneficiaryAddress\":\"112 Brannan St\",\"beneficiaryAddress2\":\"\",\"beneficiaryCity\":\"San Francisco\",\"beneficiaryState\":\"CA\",\"beneficiaryPostal\":\"94108\",\"beneficiaryPhoneNumber\":\"+14102239203\",\"beneficiaryDobDay\":\"15\",\"beneficiaryDobMonth\":\"12\",\"beneficiaryDobYear\":\"1989\",\"paymentType\":\"LOCAL_BANK_WIRE\",\"firstNameOnAccount\":\"Billy-Bob\",\"lastNameOnAccount\":\"Jones\",\"accountNumber\":\"0000000000000\",\"routingNumber\":\"0000000000\",\"accountType\":\"CHECKING\",\"chargeablePM\":\"true\"}"
 						},
+						"url": {
+							"raw": "https://api.testwyre.com/v2/paymentMethods?timestamp={{timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+								"v2",
+								"paymentMethods"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET payment_id",
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "288e85c6-997c-44bb-b648-020ba9b0bcad",
+								"exec": [
+									"let timestamp = new Date().getTime() + \"000\";",
+									"",
+									"postman.setEnvironmentVariable('timestamp', timestamp);",
+									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
+									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
+									"ACCOUNT_ID = postman.getEnvironmentVariable('ACCOUNT_ID');",
+									"publicToken = postman.getEnvironmentVariable('publicToken');",
+									"",
+									"",
+									"function calcAuthSigHash(url_body){",
+									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
+									"    return CryptoJS.enc.Hex.stringify(hash);",
+									"}",
+									"",
+									"",
+									"function defineHeaders(){",
+									"    let url = \"https://api.testwyre.com/v2/paymentMethods?timestamp=\" + timestamp;",
+									"    ",
+									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"paymentMethodType\":\"INTERNATIONAL_TRANSFER\",\"country\":\"US\",\"currency\":\"USD\",\"beneficiaryType\":\"INDIVIDUAL\",\"beneficiaryAddress\":\"112 Brannan St\",\"beneficiaryAddress2\":\"\",\"beneficiaryCity\":\"San Francisco\",\"beneficiaryState\":\"CA\",\"beneficiaryPostal\":\"94108\",\"beneficiaryPhoneNumber\":\"+14102239203\",\"beneficiaryDobDay\":\"15\",\"beneficiaryDobMonth\":\"12\",\"beneficiaryDobYear\":\"1989\",\"paymentType\":\"LOCAL_BANK_WIRE\",\"firstNameOnAccount\":\"Billy-Bob\",\"lastNameOnAccount\":\"Jones\",\"accountNumber\":\"0000000000000\",\"routingNumber\":\"0000000000\",\"accountType\":\"CHECKING\",\"chargeablePM\":\"true\"})));",
+									"}",
+									"",
+									"defineHeaders();"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "abb99e22-bd15-44a0-bea6-92bc518da26d",
+								"exec": [
+									"pm.test(\"Should expect an id to return\", function() {",
+									"    let json = pm.response.json();",
+									"    pm.environment.set('paymentId', json['id']);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							},
+							{
+								"key": "x-api-key",
+								"type": "text",
+								"value": "{{WYRE_APIKEY}}"
+							},
+							{
+								"key": "X-Api-Signature",
+								"type": "text",
+								"value": "{{signature}}"
+							}
+						],
+<<<<<<< HEAD
+						"body": {
+							"mode": "raw",
+							"raw": "{\"paymentMethodType\":\"INTERNATIONAL_TRANSFER\",\"country\":\"US\",\"currency\":\"USD\",\"beneficiaryType\":\"INDIVIDUAL\",\"beneficiaryAddress\":\"112 Brannan St\",\"beneficiaryAddress2\":\"\",\"beneficiaryCity\":\"San Francisco\",\"beneficiaryState\":\"CA\",\"beneficiaryPostal\":\"94108\",\"beneficiaryPhoneNumber\":\"+14102239203\",\"beneficiaryDobDay\":\"15\",\"beneficiaryDobMonth\":\"12\",\"beneficiaryDobYear\":\"1989\",\"paymentType\":\"LOCAL_BANK_WIRE\",\"firstNameOnAccount\":\"Billy-Bob\",\"lastNameOnAccount\":\"Jones\",\"accountNumber\":\"0000000000000\",\"routingNumber\":\"0000000000\",\"accountType\":\"CHECKING\",\"chargeablePM\":\"true\"}"
+						},
+=======
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
 						"url": {
 							"raw": "https://api.testwyre.com/v2/paymentMethods?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -1428,6 +1533,324 @@
 						{
 							"listen": "prerequest",
 							"script": {
+<<<<<<< HEAD
+								"id": "31b3a6a2-ee4c-4efd-b78d-4cd2d0818a99",
+=======
+								"id": "771c8346-ccbe-49e1-ad0c-d1d402829e60",
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
+								"exec": [
+									"let timestamp = new Date().getTime() + \"000\";",
+									"",
+									"postman.setEnvironmentVariable('timestamp', timestamp);",
+									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
+									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
+									"accountId = postman.getEnvironmentVariable('ACCOUNT_ID');",
+									"paymentId = postman.getEnvironmentVariable('paymentId');",
+									"",
+									"function calcAuthSigHash(url_body){",
+									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
+									"    return CryptoJS.enc.Hex.stringify(hash);",
+									"}",
+									"",
+									"",
+									"function defineHeaders(){",
+									"    let url = \"https://api.testwyre.com/v2/transfers?timestamp=\" + timestamp;",
+									"",
+									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
+<<<<<<< HEAD
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"source\":\"paymentMethod:PA_TXM6WTN88HG\",\"dest\":\"account:AC_YNWFWXDW3AG\",\"sourceCurrency\":\"USD\",\"destCurrency\":\"USD\",\"destAmount\":100,\"message\":\"USD Wire Transfer\",\"autoConfirm\":true})));",
+=======
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"source\":\"account:AC_YNWFWXDW3AG\",\"sourceCurrency\":\"USD\",\"sourceAmount\":\"200\",\"dest\":\"paymentmethod:PA_L64RP4JB73L\",\"destCurrency\":\"USD\",\"message\":\"Sending the user payment method\"})));",
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
+									"}",
+									"",
+									"defineHeaders();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+<<<<<<< HEAD
+								"id": "da947664-d7d0-4503-9df6-14be661aa109",
+=======
+								"id": "3594971e-a166-495b-8dcb-b2409dc9aa5f",
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
+								"exec": [
+									"pm.test(\"Should expect an id to return\", function() {",
+									"    let json = pm.response.json();",
+									"    pm.environment.set('transferId', json['id']);",
+									"});",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Api-Key",
+								"value": "{{WYRE_APIKEY}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Api-Signature",
+								"value": "{{signature}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+<<<<<<< HEAD
+							"raw": "{\"source\":\"paymentMethod:PA_TXM6WTN88HG\",\"dest\":\"account:AC_YNWFWXDW3AG\",\"sourceCurrency\":\"USD\",\"destCurrency\":\"USD\",\"destAmount\":100,\"message\":\"USD Wire Transfer\",\"autoConfirm\":true}"
+=======
+							"raw": "{\"source\":\"account:AC_YNWFWXDW3AG\",\"sourceCurrency\":\"USD\",\"sourceAmount\":\"200\",\"dest\":\"paymentmethod:PA_L64RP4JB73L\",\"destCurrency\":\"USD\",\"message\":\"Sending the user payment method\"}"
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
+						},
+						"url": {
+							"raw": "https://api.testwyre.com/v2/transfers?timestamp={{timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+								"v2",
+								"transfers"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+<<<<<<< HEAD
+					"name": "GET wire transfer",
+=======
+					"name": "POST confirm_transfer",
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+<<<<<<< HEAD
+								"id": "00fe2846-ef9f-4127-ad2f-e7de8b76f44f",
+=======
+								"id": "f5158c39-ce9a-49aa-8860-80e7cff9c724",
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
+								"exec": [
+									"let timestamp = new Date().getTime() + \"000\";",
+									"",
+									"postman.setEnvironmentVariable('timestamp', timestamp);",
+									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
+									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
+									"const transferId = postman.getEnvironmentVariable('transferId');",
+									"",
+									"function calcAuthSigHash(url_body){",
+									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
+									"    return CryptoJS.enc.Hex.stringify(hash);",
+									"}",
+									"",
+									"",
+									"function defineHeaders(){",
+<<<<<<< HEAD
+									"    let url = \"https://api.testwyre.com/v2/transfer/\" + transferId + \"?timestamp=\" + timestamp;",
+=======
+									"    let url = \"https://api.testwyre.com/v3/transfers/\" + transferId + \"/confirm?timestamp=\" + timestamp;",
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
+									"    ",
+									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"transferId\":transferId})));",
+									"}",
+									"",
+									"defineHeaders();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{WYRE_APIKEY}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-signature",
+								"value": "{{signature}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/javascript",
+								"type": "text"
+							}
+						],
+<<<<<<< HEAD
+						"url": {
+							"raw": "https://api.testwyre.com/v2/transfer/:transferId?timestamp={{timestamp}}",
+=======
+						"body": {
+							"mode": "raw",
+							"raw": "{\"transferId\":\"{{transferId}}\"}"
+						},
+						"url": {
+							"raw": "https://api.testwyre.com/v3/transfers/:transferId/confirm?timestamp={{timestamp}}",
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+<<<<<<< HEAD
+								"v2",
+								"transfer",
+								":transferId"
+=======
+								"v3",
+								"transfers",
+								":transferId",
+								"confirm"
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "transferId",
+									"value": "{{transferId}}"
+								}
+							]
+						},
+						"description": "Confirms a transfer if not set to autoconfirm"
+					},
+					"response": []
+				},
+				{
+<<<<<<< HEAD
+					"name": "GET transfer_history",
+=======
+					"name": "GET transfer",
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+<<<<<<< HEAD
+								"id": "b7e7e882-8e16-420f-9c01-686d53a7b555",
+=======
+								"id": "02de4f9e-be2c-4d24-a89c-a2d239cae51c",
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
+								"exec": [
+									"let timestamp = new Date().getTime() + \"000\";",
+									"",
+									"postman.setEnvironmentVariable('timestamp', timestamp);",
+									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
+									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
+									"",
+									"function calcAuthSigHash(url_body){",
+									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
+									"    return CryptoJS.enc.Hex.stringify(hash);",
+									"}",
+									"",
+									"",
+									"function defineHeaders(){",
+<<<<<<< HEAD
+									"    let url = \"https://api.testwyre.com/v3/transfers?timestamp=\" + timestamp;",
+=======
+									"    let url = \"https://api.testwyre.com/v3/transfers/\" + transferId + \"?timestamp=\" + timestamp;",
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
+									"    ",
+									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
+									"}",
+									"",
+									"defineHeaders();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-api-key",
+								"value": "{{WYRE_APIKEY}}",
+								"type": "text"
+							},
+							{
+								"key": "x-api-signature",
+								"value": "{{signature}}",
+								"type": "text"
+<<<<<<< HEAD
+							}
+						],
+						"url": {
+							"raw": "https://api.testwyre.com/v3/transfers?timestamp={{timestamp}}",
+=======
+							}
+						],
+						"url": {
+							"raw": "https://api.testwyre.com/v3/transfers/:transferId?timestamp={{timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+								"v3",
+								"transfers",
+								":transferId"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "transferId",
+									"value": "{{transferId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST create wire transfer",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
 								"id": "31b3a6a2-ee4c-4efd-b78d-4cd2d0818a99",
 								"exec": [
 									"let timestamp = new Date().getTime() + \"000\";",
@@ -1498,6 +1921,7 @@
 						},
 						"url": {
 							"raw": "https://api.testwyre.com/v2/transfers?timestamp={{timestamp}}",
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
 							"protocol": "https",
 							"host": [
 								"api",
@@ -1505,6 +1929,10 @@
 								"com"
 							],
 							"path": [
+<<<<<<< HEAD
+								"v3",
+								"transfers"
+=======
 								"v2",
 								"transfers"
 							],
@@ -1578,81 +2006,7 @@
 								"v2",
 								"transfer",
 								":transferId"
-							],
-							"query": [
-								{
-									"key": "timestamp",
-									"value": "{{timestamp}}"
-								}
-							],
-							"variable": [
-								{
-									"key": "transferId",
-									"value": "{{transferId}}"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GET transfer_history",
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"id": "b7e7e882-8e16-420f-9c01-686d53a7b555",
-								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
-									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"",
-									"function calcAuthSigHash(url_body){",
-									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
-									"    return CryptoJS.enc.Hex.stringify(hash);",
-									"}",
-									"",
-									"",
-									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/transfers?timestamp=\" + timestamp;",
-									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
-									"}",
-									"",
-									"defineHeaders();"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "x-api-key",
-								"value": "{{WYRE_APIKEY}}",
-								"type": "text"
-							},
-							{
-								"key": "x-api-signature",
-								"value": "{{signature}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "https://api.testwyre.com/v3/transfers?timestamp={{timestamp}}",
-							"protocol": "https",
-							"host": [
-								"api",
-								"testwyre",
-								"com"
-							],
-							"path": [
-								"v3",
-								"transfers"
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
 							],
 							"query": [
 								{
@@ -1692,8 +2046,120 @@
 									"value": "priced"
 								}
 							]
+<<<<<<< HEAD
 						},
 						"description": "Get a list of all current exchange rates"
+=======
+						}
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
+					},
+					"response": []
+				},
+				{
+					"name": "GET Limits",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d3cde146-366d-4d7d-bfb8-e757156e064b",
+								"exec": [
+									"let timestamp = new Date().getTime() + \"000\";",
+									"",
+									"postman.setEnvironmentVariable('timestamp', timestamp);",
+									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
+									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
+									"accountId = postman.getEnvironmentVariable('ACCOUNT_ID');",
+									"",
+									"function calcAuthSigHash(url_body){",
+									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
+									"    return CryptoJS.enc.Hex.stringify(hash);",
+									"}",
+									"",
+									"",
+									"function defineHeaders(){",
+									"    let url = \"https://api.testwyre.com/v3/limits?timestamp=\" + timestamp;",
+									"",
+									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
+									"}",
+									"",
+									"defineHeaders();",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Api-Key",
+								"value": "{{WYRE_APIKEY}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Api-Signature",
+								"value": "{{signature}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.testwyre.com/v3/limits?timestamp={{timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+								"v3",
+								"limits"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							]
+						},
+<<<<<<< HEAD
+						"description": "Getting the transfer limits for each user."
+=======
+						"description": "Get a list of all transfers"
+					},
+					"response": []
+				},
+				{
+					"name": "GET exchange_rates",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.testwyre.com/v3/rates?pretty&as=priced",
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+								"v3",
+								"rates"
+							],
+							"query": [
+								{
+									"key": "pretty",
+									"value": null
+								},
+								{
+									"key": "as",
+									"value": "priced"
+								}
+							]
+						},
+						"description": "Get a list of all current exchange rates"
+>>>>>>> 88dab27186fb051d058deda5575e1eb09e085905
 					},
 					"response": []
 				},
