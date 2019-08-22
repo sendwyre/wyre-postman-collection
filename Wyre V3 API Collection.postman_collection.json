@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "0dd6962e-7af7-4f67-9a21-032460b6ed66",
+		"_postman_id": "2a99aa9e-4a24-451f-866e-13a80403f686",
 		"name": "Wyre V3 API Collection",
 		"description": "Collection of Wyre V3 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -110,7 +110,7 @@
 									"    let url = \"https://api.testwyre.com/v2/apiKeys?timestamp=\" + timestamp;",
 									"    ",
 									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"desc\":\"Users keys\",\"type\":\"FULL\",\"ipWhitelist\":[]})));",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -393,7 +393,7 @@
 									"    let url = \"https://api.testwyre.com/v3/accounts?timestamp=\" + timestamp;",
 									"    ",
 									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"type\":\"INDIVIDUAL\",\"country\":\"US\",\"subaccount\":true,\"profileFields\":[{\"fieldId\":\"individualLegalName\",\"value\":\"Crash Bandicoot\"},{\"fieldId\":\"individualEmail\",\"value\":\"crashb@test.com\"},{\"fieldId\":\"individualResidenceAddress\",\"value\":{\"street1\":\"1 Market St\",\"street2\":\"Suite 402\",\"city\":\"San Francisco\",\"state\":\"CA\",\"postalCode\":\"94105\",\"country\":\"US\"}}]})));",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -475,7 +475,7 @@
 									"    let url = \"https://api.testwyre.com/v3/accounts/\" + ACCOUNT_ID + \"?timestamp=\" + timestamp;",
 									"    ",
 									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"profileFields\":[{\"fieldId\":\"individualLegalName\",\"value\":\"Jeffrey Jeffrey\"}]})));",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -653,8 +653,6 @@
 									"postman.setEnvironmentVariable('timestamp', timestamp);",
 									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
 									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"ACCOUNT_ID = postman.getEnvironmentVariable('ACCOUNT_ID');",
-									"publicToken = postman.getEnvironmentVariable('publicToken');",
 									"",
 									"",
 									"function calcAuthSigHash(url_body){",
@@ -667,7 +665,7 @@
 									"    let url = \"https://api.testwyre.com/v2/paymentMethods?timestamp=\" + timestamp;",
 									"    ",
 									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"publicToken\":publicToken,\"paymentMethodType\":\"LOCAL_TRANSFER\",\"country\":\"US\"})));",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -763,7 +761,7 @@
 									"    let url = \"https://api.testwyre.com/v2/paymentMethods?timestamp=\" + timestamp;",
 									"    ",
 									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"paymentMethodType\":\"INTERNATIONAL_TRANSFER\",\"country\":\"US\",\"currency\":\"USD\",\"beneficiaryType\":\"INDIVIDUAL\",\"beneficiaryAddress\":\"112 Brannan St\",\"beneficiaryAddress2\":\"\",\"beneficiaryCity\":\"San Francisco\",\"beneficiaryState\":\"CA\",\"beneficiaryPostal\":\"94108\",\"beneficiaryPhoneNumber\":\"+14102239203\",\"beneficiaryDobDay\":\"15\",\"beneficiaryDobMonth\":\"12\",\"beneficiaryDobYear\":\"1989\",\"paymentType\":\"LOCAL_BANK_WIRE\",\"firstNameOnAccount\":\"Billy-Bob\",\"lastNameOnAccount\":\"Jones\",\"accountNumber\":\"0000000000000\",\"routingNumber\":\"0000000000\",\"accountType\":\"CHECKING\",\"chargeablePM\":\"true\"})));",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -1075,7 +1073,6 @@
 									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
 									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
 									"paymentId = postman.getEnvironmentVariable('paymentId');",
-									"blockchain = postman.getEnvironmentVariable('blockchain');",
 									"",
 									"function calcAuthSigHash(url_body) {",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -1087,7 +1084,7 @@
 									"",
 									"    console.log(url);",
 									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"blockchain\":\"BTC\"})));",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -1181,7 +1178,7 @@
 									"    let url = \"https://api.testwyre.com/v3/transfers?timestamp=\" + timestamp;",
 									"    ",
 									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"source\":\"account:AC_YNWFWXDW3AG\",\"sourceCurrency\":\"USD\",\"sourceAmount\":\"200\",\"dest\":\"paymentmethod:PA_L64RP4JB73L\",\"destCurrency\":\"USD\",\"message\":\"Sending the user payment method\"})));",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -1281,7 +1278,7 @@
 									"    let url = \"https://api.testwyre.com/v3/transfers/\" + transferId + \"/confirm?timestamp=\" + timestamp;",
 									"    ",
 									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"transferId\":transferId})));",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -1448,7 +1445,7 @@
 									"    let url = \"https://api.testwyre.com/v2/transfers?timestamp=\" + timestamp;",
 									"",
 									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"source\":\"paymentMethod:PA_TXM6WTN88HG\",\"dest\":\"account:AC_YNWFWXDW3AG\",\"sourceCurrency\":\"USD\",\"destCurrency\":\"USD\",\"destAmount\":100,\"message\":\"USD Wire Transfer\",\"autoConfirm\":true})));",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();",
@@ -1543,7 +1540,7 @@
 									"    let url = \"https://api.testwyre.com/v2/transfer/\" + transferId + \"?timestamp=\" + timestamp;",
 									"    ",
 									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"transferId\":transferId})));",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -1877,7 +1874,7 @@
 									"    let url = \"https://api.testwyre.com/v3/subscriptions?timestamp=\" + timestamp;",
 									"    ",
 									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({\"subscribeTo\":\"account:AC_9D7AVPGTEBB\",\"notifyTarget\":\"https://yourwebhookhere.com/webhook/account\"})));",
+									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
