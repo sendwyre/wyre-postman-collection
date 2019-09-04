@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2a99aa9e-4a24-451f-866e-13a80403f686",
+		"_postman_id": "2a87bb00-5361-4029-8f01-edcfe7216a29",
 		"name": "Wyre V3 API Collection",
 		"description": "Collection of Wyre V3 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -15,7 +15,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "e8315856-8edb-48f7-a401-3ee5cf696f18",
+								"id": "fff7b197-27bf-41b4-a4c5-9fd6845c36e5",
 								"exec": [
 									"function createSecretKey(){",
 									"    let date = new Date().getTime();",
@@ -30,8 +30,16 @@
 									"    let secretKey = JSON.stringify({\"secretKey\": uuid});",
 									"    pm.environment.set(\"secretKey\",secretKey);",
 									"    pm.environment.set(\"WYRE_TOKEN\", uuid);",
+									"    console.log(\"created new secret key: \", uuid);",
 									"}",
 									"",
+									"function defineHeaders(){",
+									"    // remove the headers added from the collection-wide auth prereq script",
+									"    pm.request.headers.remove('x-api-key');",
+									"    pm.request.headers.remove('x-api-signature');",
+									"}",
+									"",
+									"defineHeaders();",
 									"createSecretKey();"
 								],
 								"type": "text/javascript"
@@ -40,12 +48,12 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "9df8490e-53d0-46d8-9e3b-8810aaf787db",
+								"id": "4891d1a9-3e4a-4367-a2f9-971230a85011",
 								"exec": [
 									"pm.test(\"Should expect an id to return\", function() {",
 									"    let json = pm.response.json();",
 									"    // pm.environment.set('newApiKeys', json['apiKey']);",
-									"    console.log(json['apiKey']);",
+									"    console.log(\"created api key: \", json['apiKey']);",
 									"    pm.environment.set('WYRE_APIKEY', json['apiKey']);",
 									"});",
 									""
@@ -68,12 +76,9 @@
 							"raw": "{{secretKey}}"
 						},
 						"url": {
-							"raw": "https://api.testwyre.com/v2/sessions/auth/key",
-							"protocol": "https",
+							"raw": "{{DOMAIN}}/v2/sessions/auth/key",
 							"host": [
-								"api",
-								"testwyre",
-								"com"
+								"{{DOMAIN}}"
 							],
 							"path": [
 								"v2",
@@ -94,26 +99,7 @@
 							"script": {
 								"id": "b16acc01-54ae-4361-b0f0-8d67901e0994",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
-									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"",
-									"function calcAuthSigHash(url_body){",
-									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
-									"    return CryptoJS.enc.Hex.stringify(hash);",
-									"}",
-									"",
-									"",
-									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v2/apiKeys?timestamp=\" + timestamp;",
-									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
-									"}",
-									"",
-									"defineHeaders();"
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -141,16 +127,6 @@
 								"name": "Content-Type",
 								"value": "application/json",
 								"type": "text"
-							},
-							{
-								"key": "x-api-key",
-								"value": "{{WYRE_APIKEY}}",
-								"type": "text"
-							},
-							{
-								"key": "x-api-signature",
-								"value": "{{signature}}",
-								"type": "text"
 							}
 						],
 						"body": {
@@ -158,22 +134,13 @@
 							"raw": "{\"desc\":\"Users keys\",\"type\":\"FULL\",\"ipWhitelist\":[]}"
 						},
 						"url": {
-							"raw": "https://api.testwyre.com/v2/apiKeys?timestamp={{timestamp}}",
-							"protocol": "https",
+							"raw": "{{DOMAIN}}/v2/apiKeys",
 							"host": [
-								"api",
-								"testwyre",
-								"com"
+								"{{DOMAIN}}"
 							],
 							"path": [
 								"v2",
 								"apiKeys"
-							],
-							"query": [
-								{
-									"key": "timestamp",
-									"value": "{{timestamp}}"
-								}
 							]
 						}
 					},
@@ -187,27 +154,7 @@
 							"script": {
 								"id": "9977ed9c-6aad-460f-91dc-b26f96ccb0d2",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
-									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"const newApiKey = postman.getEnvironmentVariable('newApiKey');",
-									"",
-									"function calcAuthSigHash(url_body){",
-									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
-									"    return CryptoJS.enc.Hex.stringify(hash);",
-									"}",
-									"",
-									"",
-									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v2/apiKey/\" + newApiKey + \"?timestamp=\" + timestamp;",
-									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
-									"}",
-									"",
-									"defineHeaders();"
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -217,23 +164,14 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "https://api.testwyre.com/v2/apiKey/:apiKey?timestamp={{timestamp}}",
-							"protocol": "https",
+							"raw": "{{DOMAIN}}/v2/apiKey/:apiKey",
 							"host": [
-								"api",
-								"testwyre",
-								"com"
+								"{{DOMAIN}}"
 							],
 							"path": [
 								"v2",
 								"apiKey",
 								":apiKey"
-							],
-							"query": [
-								{
-									"key": "timestamp",
-									"value": "{{timestamp}}"
-								}
 							],
 							"variable": [
 								{
@@ -256,30 +194,8 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "fa2e4775-40aa-415a-8198-e9ddd9515b66",
+								"id": "0f73b56a-83ad-4be4-b9b6-11436df284a5",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
-									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"accountId = postman.getEnvironmentVariable('ACCOUNT_ID');",
-									"",
-									"function calcAuthSigHash(url_body){",
-									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
-									"    return CryptoJS.enc.Hex.stringify(hash);",
-									"}",
-									"",
-									"",
-									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/accounts/\" + accountId + \"?timestamp=\" + timestamp;",
-									"",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
-									"}",
-									"",
-									"defineHeaders();",
-									"",
 									""
 								],
 								"type": "text/javascript"
@@ -288,7 +204,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "f32bb9c0-c6f1-420f-99b3-f6734076cdc4",
+								"id": "d51bb703-1514-4c3e-84e2-1ebc552a2e44",
 								"exec": [
 									"pm.test(\"response is okay\", function() {",
 									"   pm.response.to.have.status(200); ",
@@ -322,46 +238,20 @@
 						"method": "GET",
 						"header": [
 							{
-								"key": "X-Api-Key",
-								"name": "Content-Type",
-								"value": "{{WYRE_APIKEY}}",
-								"type": "text"
-							},
-							{
-								"key": "X-Api-Signature",
-								"value": "{{signature}}",
-								"type": "text"
-							},
-							{
 								"key": "Content-Type",
 								"value": "",
 								"disabled": true
 							}
 						],
 						"url": {
-							"raw": "https://api.testwyre.com/v3/accounts/:account_id?timestamp={{timestamp}}",
-							"protocol": "https",
+							"raw": "{{DOMAIN}}/v3/accounts/{{ACCOUNT_ID}}",
 							"host": [
-								"api",
-								"testwyre",
-								"com"
+								"{{DOMAIN}}"
 							],
 							"path": [
 								"v3",
 								"accounts",
-								":account_id"
-							],
-							"query": [
-								{
-									"key": "timestamp",
-									"value": "{{timestamp}}"
-								}
-							],
-							"variable": [
-								{
-									"key": "account_id",
-									"value": "{{ACCOUNT_ID}}"
-								}
+								"{{ACCOUNT_ID}}"
 							]
 						},
 						"description": "Get account information from Wyre API"
@@ -374,29 +264,25 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "80b1c62f-dbad-47f7-9869-a6f010d42ef3",
+								"id": "fb537f77-a4e3-4a49-bb3f-d7e03b25c477",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
-									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"",
-									"",
-									"function calcAuthSigHash(url_body){",
-									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
-									"    return CryptoJS.enc.Hex.stringify(hash);",
-									"}",
-									"",
-									"",
-									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/accounts?timestamp=\" + timestamp;",
-									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
-									"}",
-									"",
-									"defineHeaders();"
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "97ba2edc-133b-4509-bf88-fc6a08ee218a",
+								"exec": [
+									"pm.test(\"Should expect an id to return\", function() {",
+									"    let json = pm.response.json();",
+									"    // pm.environment.set('newApiKeys', json['apiKey']);",
+									"    console.log(\"created new account: \", json['id']);",
+									"    pm.environment.set('ACCOUNT_ID', json['id']);",
+									"});",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -406,16 +292,6 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "X-Api-Key",
-								"value": "{{WYRE_APIKEY}}",
-								"type": "text"
-							},
-							{
-								"key": "X-Api-Signature",
-								"value": "{{signature}}",
-								"type": "text"
-							},
-							{
 								"key": "Content-Type",
 								"name": "Content-Type",
 								"value": "application/json",
@@ -424,25 +300,16 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"type\":\"INDIVIDUAL\",\"country\":\"US\",\"subaccount\":true,\"profileFields\":[{\"fieldId\":\"individualLegalName\",\"value\":\"Crash Bandicoot\"},{\"fieldId\":\"individualEmail\",\"value\":\"crashb@test.com\"},{\"fieldId\":\"individualResidenceAddress\",\"value\":{\"street1\":\"1 Market St\",\"street2\":\"Suite 402\",\"city\":\"San Francisco\",\"state\":\"CA\",\"postalCode\":\"94105\",\"country\":\"US\"}}]}"
+							"raw": "{\"type\":\"INDIVIDUAL\",\"country\":\"US\",\"subaccount\":true,\"profileFields\":[{\"fieldId\":\"individualLegalName\",\"value\":\"Crash Bandicoot\"},{\"fieldId\":\"individualEmail\",\"value\":\"tyson+123232@sendwyre.com\"},{\"fieldId\":\"individualResidenceAddress\",\"value\":{\"street1\":\"1 Market St\",\"street2\":\"Suite 402\",\"city\":\"San Francisco\",\"state\":\"CA\",\"postalCode\":\"94105\",\"country\":\"US\"}}]}"
 						},
 						"url": {
-							"raw": "https://api.testwyre.com/v3/accounts?timestamp={{timestamp}}",
-							"protocol": "https",
+							"raw": "{{DOMAIN}}/v3/accounts",
 							"host": [
-								"api",
-								"testwyre",
-								"com"
+								"{{DOMAIN}}"
 							],
 							"path": [
 								"v3",
 								"accounts"
-							],
-							"query": [
-								{
-									"key": "timestamp",
-									"value": "{{timestamp}}"
-								}
 							]
 						},
 						"description": "Creates a Wyre account"
@@ -457,28 +324,7 @@
 							"script": {
 								"id": "9cfee522-46f1-4af8-b232-464dc1e7df72",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
-									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"ACCOUNT_ID = postman.getEnvironmentVariable('ACCOUNT_ID');",
-									"",
-									"",
-									"function calcAuthSigHash(url_body){",
-									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
-									"    return CryptoJS.enc.Hex.stringify(hash);",
-									"}",
-									"",
-									"",
-									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/accounts/\" + ACCOUNT_ID + \"?timestamp=\" + timestamp;",
-									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
-									"}",
-									"",
-									"defineHeaders();"
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -492,16 +338,6 @@
 								"name": "Content-Type",
 								"value": "application/json",
 								"type": "text"
-							},
-							{
-								"key": "X-Api-Key",
-								"value": "{{WYRE_APIKEY}}",
-								"type": "text"
-							},
-							{
-								"key": "X-Api-Signature",
-								"value": "{{signature}}",
-								"type": "text"
 							}
 						],
 						"body": {
@@ -509,29 +345,14 @@
 							"raw": "{\"profileFields\":[{\"fieldId\":\"individualLegalName\",\"value\":\"Jeffrey Jeffrey\"}]}"
 						},
 						"url": {
-							"raw": "https://api.testwyre.com/v3/accounts/:accountId?timestamp={{timestamp}}",
-							"protocol": "https",
+							"raw": "{{DOMAIN}}/v3/accounts/{{ACCOUNT_ID}}",
 							"host": [
-								"api",
-								"testwyre",
-								"com"
+								"{{DOMAIN}}"
 							],
 							"path": [
 								"v3",
 								"accounts",
-								":accountId"
-							],
-							"query": [
-								{
-									"key": "timestamp",
-									"value": "{{timestamp}}"
-								}
-							],
-							"variable": [
-								{
-									"key": "accountId",
-									"value": "{{ACCOUNT_ID}}"
-								}
+								"{{ACCOUNT_ID}}"
 							]
 						}
 					},
@@ -545,25 +366,20 @@
 							"script": {
 								"id": "2fbfbd7a-b3e0-4239-89be-e6ba31a689e8",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const signData = true;",
+									"const sdk = require('postman-collection');",
+									"const timestamp = new Date().getTime() + \"000\";",
+									"const WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"const WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"const ACCOUNT_ID = pm.environment.get('ACCOUNT_ID');",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"ACCOUNT_ID = postman.getEnvironmentVariable('ACCOUNT_ID');",
-									"",
-									"",
-									"function calcAuthSigHash(url_body){",
-									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
-									"    return CryptoJS.enc.Hex.stringify(hash);",
-									"}",
-									"",
+									"pm.environment.set('timestamp', timestamp);",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/accounts/\" + ACCOUNT_ID + \"/individualGovernmentId/\" + \"?timestamp=\" + timestamp;",
-									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({})));",
+									"    // remove the headers added from the collection-wide auth prereq script",
+									"    pm.request.headers.remove('x-api-key');",
+									"    pm.request.headers.remove('x-api-signature');",
+									"    pm.request.headers.add({ key: 'authorization', value: 'bearer ' + WYRE_TOKEN });",
 									"}",
 									"",
 									"defineHeaders();"
@@ -576,50 +392,27 @@
 						"method": "POST",
 						"header": [
 							{
-								"key": "x-api-key",
-								"value": "{{WYRE_APIKEY}}",
-								"type": "text"
-							},
-							{
-								"key": "x-api-signature",
-								"value": "{{signature}}",
-								"type": "text"
-							},
-							{
 								"key": "Content-Type",
 								"value": "image/jpeg",
 								"type": "text"
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "image",
-									"value": "",
-									"type": "file"
-								}
-							]
+							"mode": "file",
+							"file": {
+								"src": "/Users/tyson/Dropbox/Camera Uploads/2012-03-31 14.50.26.jpg"
+							}
 						},
 						"url": {
-							"raw": "https://api.testwyre.com/v3/accounts/:accountId/:fieldId?timestamp={{timestamp}}",
-							"protocol": "https",
+							"raw": "{{DOMAIN}}/v3/accounts/:accountId/:fieldId",
 							"host": [
-								"api",
-								"testwyre",
-								"com"
+								"{{DOMAIN}}"
 							],
 							"path": [
 								"v3",
 								"accounts",
 								":accountId",
 								":fieldId"
-							],
-							"query": [
-								{
-									"key": "timestamp",
-									"value": "{{timestamp}}"
-								}
 							],
 							"variable": [
 								{
@@ -648,27 +441,7 @@
 							"script": {
 								"id": "288e85c6-997c-44bb-b648-020ba9b0bcad",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
-									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"",
-									"",
-									"function calcAuthSigHash(url_body){",
-									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
-									"    return CryptoJS.enc.Hex.stringify(hash);",
-									"}",
-									"",
-									"",
-									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v2/paymentMethods?timestamp=\" + timestamp;",
-									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
-									"}",
-									"",
-									"defineHeaders();"
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -696,16 +469,6 @@
 								"name": "Content-Type",
 								"value": "application/json",
 								"type": "text"
-							},
-							{
-								"key": "x-api-key",
-								"value": "{{WYRE_APIKEY}}",
-								"type": "text"
-							},
-							{
-								"key": "X-Api-Signature",
-								"value": "{{signature}}",
-								"type": "text"
 							}
 						],
 						"body": {
@@ -713,22 +476,13 @@
 							"raw": "{\"publicToken\":\"{{publicToken}}\",\"paymentMethodType\":\"LOCAL_TRANSFER\",\"country\":\"US\"}"
 						},
 						"url": {
-							"raw": "https://api.testwyre.com/v2/paymentMethods?timestamp={{timestamp}}",
-							"protocol": "https",
+							"raw": "{{DOMAIN}}/v2/paymentMethods",
 							"host": [
-								"api",
-								"testwyre",
-								"com"
+								"{{DOMAIN}}"
 							],
 							"path": [
 								"v2",
 								"paymentMethods"
-							],
-							"query": [
-								{
-									"key": "timestamp",
-									"value": "{{timestamp}}"
-								}
 							]
 						}
 					},
@@ -792,16 +546,6 @@
 								"name": "Content-Type",
 								"type": "text",
 								"value": "application/json"
-							},
-							{
-								"key": "x-api-key",
-								"type": "text",
-								"value": "{{WYRE_APIKEY}}"
-							},
-							{
-								"key": "X-Api-Signature",
-								"type": "text",
-								"value": "{{signature}}"
 							}
 						],
 						"body": {
@@ -809,12 +553,9 @@
 							"raw": "{\"paymentMethodType\":\"INTERNATIONAL_TRANSFER\",\"country\":\"US\",\"currency\":\"USD\",\"beneficiaryType\":\"INDIVIDUAL\",\"beneficiaryAddress\":\"112 Brannan St\",\"beneficiaryAddress2\":\"\",\"beneficiaryCity\":\"San Francisco\",\"beneficiaryState\":\"CA\",\"beneficiaryPostal\":\"94108\",\"beneficiaryPhoneNumber\":\"+14102239203\",\"beneficiaryDobDay\":\"15\",\"beneficiaryDobMonth\":\"12\",\"beneficiaryDobYear\":\"1989\",\"paymentType\":\"LOCAL_BANK_WIRE\",\"firstNameOnAccount\":\"Billy-Bob\",\"lastNameOnAccount\":\"Jones\",\"accountNumber\":\"0000000000000\",\"routingNumber\":\"0000000000\",\"accountType\":\"CHECKING\",\"chargeablePM\":\"true\"}"
 						},
 						"url": {
-							"raw": "https://api.testwyre.com/v2/paymentMethods?timestamp={{timestamp}}",
-							"protocol": "https",
+							"raw": "{{DOMAIN}}/v2/paymentMethods?timestamp={{timestamp}}",
 							"host": [
-								"api",
-								"testwyre",
-								"com"
+								"{{DOMAIN}}"
 							],
 							"path": [
 								"v2",
@@ -2116,7 +1857,30 @@
 				"id": "62620a01-160b-434a-8233-1887099207c8",
 				"type": "text/javascript",
 				"exec": [
-					""
+					"const sdk = require('postman-collection');",
+					"const timestamp = new Date().getTime() + \"000\";",
+					"const WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+					"const WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+					"const ACCOUNT_ID = pm.environment.get('ACCOUNT_ID');",
+					"",
+					"pm.environment.set('timestamp', timestamp);",
+					"",
+					"function calcAuthSigHash(){",
+					"    let resolvedRequest = pm.request.toObjectResolved(null, [pm.variables.toObject()], { ignoreOwnVariables: true });",
+					"    let url = new sdk.Url(resolvedRequest.url).getRaw();",
+					"    let signData = ['POST', 'PUT'].indexOf(pm.request.method) >= 0 && request.data;",
+					"    let tosign = url + (signData ? request.data : '');",
+					"    let hash = CryptoJS.HmacSHA256(tosign, WYRE_TOKEN);",
+					"    return CryptoJS.enc.Hex.stringify(hash);",
+					"}",
+					"",
+					"function defineHeaders(){",
+					"    pm.request.url.query.add({ key: 'timestamp', value: timestamp });",
+					"    pm.request.headers.add({ key: 'x-api-signature', value: calcAuthSigHash() });",
+					"    pm.request.headers.add({ key: 'x-api-key', value: WYRE_APIKEY });",
+					"}",
+					"",
+					"defineHeaders();"
 				]
 			}
 		},
