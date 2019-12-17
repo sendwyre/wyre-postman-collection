@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2a99aa9e-4a24-451f-866e-13a80403f686",
+		"_postman_id": "18d9aaf7-79f1-454f-8fa9-503e142523fc",
 		"name": "Wyre V3 API Collection",
 		"description": "Collection of Wyre V3 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -8,6 +8,7 @@
 	"item": [
 		{
 			"name": "Key Management",
+			"description": null,
 			"item": [
 				{
 					"name": "POST Submit Auth Token",
@@ -216,6 +217,10 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "https://api.testwyre.com/v2/apiKey/:apiKey?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -249,6 +254,7 @@
 		},
 		{
 			"name": "Account Overview",
+			"description": null,
 			"item": [
 				{
 					"name": "GET  get_account",
@@ -338,6 +344,10 @@
 								"disabled": true
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/accounts/:account_id?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -639,6 +649,7 @@
 		},
 		{
 			"name": "Payment Method Overview",
+			"description": null,
 			"item": [
 				{
 					"name": "ACH - Create Payment Method",
@@ -880,6 +891,10 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "https://api.testwyre.com/v2/paymentMethod/:paymentMethodId?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -955,6 +970,10 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "https://api.testwyre.com/v2/paymentMethods?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -1152,6 +1171,7 @@
 		},
 		{
 			"name": "Transfers and Exchanges",
+			"description": null,
 			"item": [
 				{
 					"name": "POST create_transfer",
@@ -1259,7 +1279,8 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "f5158c39-ce9a-49aa-8860-80e7cff9c724",
+								"id": "69ef39cf-f3d3-449d-a489-198149b68c07",
+								"type": "text/javascript",
 								"exec": [
 									"let timestamp = new Date().getTime() + \"000\";",
 									"",
@@ -1267,6 +1288,7 @@
 									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
 									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
 									"const transferId = postman.getEnvironmentVariable('transferId');",
+									"request.data = \"\";",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -1282,8 +1304,7 @@
 									"}",
 									"",
 									"defineHeaders();"
-								],
-								"type": "text/javascript"
+								]
 							}
 						}
 					],
@@ -1292,24 +1313,20 @@
 						"header": [
 							{
 								"key": "x-api-key",
-								"value": "{{WYRE_APIKEY}}",
-								"type": "text"
+								"value": "{{WYRE_APIKEY}}"
 							},
 							{
 								"key": "x-api-signature",
-								"value": "{{signature}}",
-								"type": "text"
+								"value": "{{signature}}"
 							},
 							{
 								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/javascript",
-								"type": "text"
+								"value": "application/javascript"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\"transferId\":\"{{transferId}}\"}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/transfers/:transferId/confirm?timestamp={{timestamp}}",
@@ -1390,6 +1407,10 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/transfers/:transferId?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -1569,6 +1590,10 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "https://api.testwyre.com/v2/transfer/:transferId?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -1646,6 +1671,10 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/transfers?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -1674,6 +1703,10 @@
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/rates?pretty&as=priced",
 							"protocol": "https",
@@ -1750,6 +1783,10 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/limits?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -1822,6 +1859,10 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/limits?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -1849,6 +1890,7 @@
 		},
 		{
 			"name": "Data Subscriptions",
+			"description": "Subscribing to data via webhooks",
 			"item": [
 				{
 					"name": "POST subscribe_to_a_webhook",
@@ -2083,6 +2125,10 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/subscriptions?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -2105,8 +2151,7 @@
 					},
 					"response": []
 				}
-			],
-			"description": "Subscribing to data via webhooks"
+			]
 		}
 	],
 	"event": [
