@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "18d9aaf7-79f1-454f-8fa9-503e142523fc",
+		"_postman_id": "cc33ba56-ec6a-47e1-a05d-cc5cc671ffe3",
 		"name": "Wyre V3 API Collection",
 		"description": "Collection of Wyre V3 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
@@ -8,7 +8,6 @@
 	"item": [
 		{
 			"name": "Key Management",
-			"description": null,
 			"item": [
 				{
 					"name": "POST Submit Auth Token",
@@ -16,10 +15,10 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "e8315856-8edb-48f7-a401-3ee5cf696f18",
+								"id": "ca73cbf8-b90d-44b2-b75f-44a921c8067a",
 								"exec": [
 									"function createSecretKey(){",
-									"    let date = new Date().getTime();",
+									"    let date = Date.now();",
 									"    var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {",
 									"\t\tvar r = (date + Math.random()*16)%16 | 0;",
 									"\t\t",
@@ -41,7 +40,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "9df8490e-53d0-46d8-9e3b-8810aaf787db",
+								"id": "a0ff5e08-408e-4332-b02a-1a03df135338",
 								"exec": [
 									"pm.test(\"Should expect an id to return\", function() {",
 									"    let json = pm.response.json();",
@@ -93,13 +92,15 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "b16acc01-54ae-4361-b0f0-8d67901e0994",
+								"id": "65814dc2-3308-4fa4-8e12-81fef661f726",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"let timestamp = Date.now();",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
+									"const WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"const WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -108,10 +109,10 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v2/apiKeys?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v2/apiKeys?timestamp=${timestamp}`;",
 									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -122,7 +123,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "1b255e76-0a85-4226-994a-3840fc7af238",
+								"id": "2a71d1bc-0719-48a9-b499-ce79fe2699b3",
 								"exec": [
 									"pm.test(\"Should expect an id to return\", function() {",
 									"    let json = pm.response.json();",
@@ -186,14 +187,19 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "9977ed9c-6aad-460f-91dc-b26f96ccb0d2",
+								"id": "d88caa05-63d6-4da5-a6c4-f21f608a3a08",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"let timestamp = Date.now();",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"const newApiKey = postman.getEnvironmentVariable('newApiKey');",
+									"pm.environment.set('newApiKey','AK-QFGLM62A-RA43MMNN-BCF787X3-DL646TUW');",
+									"",
+									"const WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"const WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"",
+									"const newApiKey = pm.environment.get('newApiKey');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -202,10 +208,10 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v2/apiKey/\" + newApiKey + \"?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v2/apiKey/${newApiKey}?timestamp=${timestamp}`;",
 									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -250,11 +256,11 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Account Overview",
-			"description": null,
 			"item": [
 				{
 					"name": "GET  get_account",
@@ -262,31 +268,31 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "fa2e4775-40aa-415a-8198-e9ddd9515b66",
+								"id": "4ca2b5b8-cc55-4895-904e-4c0f008b8665",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"accountId = postman.getEnvironmentVariable('ACCOUNT_ID');",
+									"pm.environment.set('ACCOUNT_ID', 'AC_239EMR3PYAP');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"let accountId = pm.environment.get('ACCOUNT_ID');",
+									"let WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"let WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
 									"    return CryptoJS.enc.Hex.stringify(hash);",
 									"}",
 									"",
-									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/accounts/\" + accountId + \"?timestamp=\" + timestamp;",
-									"",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
+									"    let url = `https://api.testwyre.com/v3/accounts/${accountId}?timestamp=${timestamp}`;",
+									"    pm.environment.set('X-Api-Key', WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url));",
 									"}",
 									"",
-									"defineHeaders();",
-									"",
-									""
+									"defineHeaders();"
 								],
 								"type": "text/javascript"
 							}
@@ -294,7 +300,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "f32bb9c0-c6f1-420f-99b3-f6734076cdc4",
+								"id": "64cc6a9f-7fee-45b8-a568-8f0a5937daa6",
 								"exec": [
 									"pm.test(\"response is okay\", function() {",
 									"   pm.response.to.have.status(200); ",
@@ -321,6 +327,9 @@
 							}
 						}
 					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"auth": {
 							"type": "noauth"
@@ -340,8 +349,7 @@
 							},
 							{
 								"key": "Content-Type",
-								"value": "",
-								"disabled": true
+								"value": "application/json"
 							}
 						],
 						"body": {
@@ -349,7 +357,7 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "https://api.testwyre.com/v3/accounts/:account_id?timestamp={{timestamp}}",
+							"raw": "https://api.testwyre.com/v3/accounts/:accountId?timestamp={{timestamp}}",
 							"protocol": "https",
 							"host": [
 								"api",
@@ -359,7 +367,7 @@
 							"path": [
 								"v3",
 								"accounts",
-								":account_id"
+								":accountId"
 							],
 							"query": [
 								{
@@ -369,8 +377,8 @@
 							],
 							"variable": [
 								{
-									"key": "account_id",
-									"value": "{{ACCOUNT_ID}}"
+									"key": "accountId",
+									"value": ""
 								}
 							]
 						},
@@ -384,13 +392,16 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "80b1c62f-dbad-47f7-9869-a6f010d42ef3",
+								"id": "39b27bb1-84d6-4768-ac86-39a23211bd6b",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"",
 									"",
 									"function calcAuthSigHash(url_body){",
@@ -398,12 +409,10 @@
 									"    return CryptoJS.enc.Hex.stringify(hash);",
 									"}",
 									"",
-									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/accounts?timestamp=\" + timestamp;",
-									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
+									"    let url = `https://api.testwyre.com/v3/accounts?timestamp=${timestamp}`;",
+									"    pm.environment.set('X-Api-Key', WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -413,23 +422,33 @@
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "SK-PPTWUFU7-BVARZ3XA-TZBR92BF-FQVBFJXQ",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
 								"key": "X-Api-Key",
-								"value": "{{WYRE_APIKEY}}",
-								"type": "text"
+								"type": "text",
+								"value": "{{WYRE_APIKEY}}"
 							},
 							{
 								"key": "X-Api-Signature",
-								"value": "{{signature}}",
-								"type": "text"
+								"type": "text",
+								"value": "{{signature}}"
 							},
 							{
 								"key": "Content-Type",
 								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
+								"type": "text",
+								"value": "application/json"
 							}
 						],
 						"body": {
@@ -465,15 +484,17 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "9cfee522-46f1-4af8-b232-464dc1e7df72",
+								"id": "93879a1f-2095-49f5-8fbe-5e15f39ca04f",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
+									"pm.environment.set('ACCOUNT_ID', 'AC_XXXXXXXX');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"ACCOUNT_ID = postman.getEnvironmentVariable('ACCOUNT_ID');",
-									"",
+									"let accountId = pm.environment.get('ACCOUNT_ID');",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -482,10 +503,9 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/accounts/\" + ACCOUNT_ID + \"?timestamp=\" + timestamp;",
-									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
+									"    let url = `https://api.testwyre.com/v3/accounts/${accountId}?timestamp=${timestamp}`;",
+									"    pm.environment.set('X-Api-Key', WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -553,66 +573,60 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "2fbfbd7a-b3e0-4239-89be-e6ba31a689e8",
+								"id": "0d0e32a6-8a52-49f4-adc1-316d16704802",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
+									"pm.environment.set('ACCOUNT_ID', 'AC_YQG97JUANCF');",
+									"// Use Authorization Bearer Token. The Token is Your Wyre Secret Key.",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"ACCOUNT_ID = postman.getEnvironmentVariable('ACCOUNT_ID');",
-									"",
-									"",
-									"function calcAuthSigHash(url_body){",
-									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
-									"    return CryptoJS.enc.Hex.stringify(hash);",
-									"}",
-									"",
-									"",
-									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/accounts/\" + ACCOUNT_ID + \"/individualGovernmentId/\" + \"?timestamp=\" + timestamp;",
-									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + JSON.stringify({})));",
-									"}",
-									"",
-									"defineHeaders();"
+									"let accountId = pm.environment.get('ACCOUNT_ID');",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');"
 								],
 								"type": "text/javascript"
 							}
 						}
 					],
 					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "SK-XXXXXXXX-XXXXXXXX-XXXXXXXX-XXXXXXXX",
+									"type": "string"
+								}
+							]
+						},
 						"method": "POST",
 						"header": [
 							{
 								"key": "x-api-key",
-								"value": "{{WYRE_APIKEY}}",
-								"type": "text"
+								"value": "",
+								"type": "text",
+								"disabled": true
 							},
 							{
 								"key": "x-api-signature",
-								"value": "{{signature}}",
-								"type": "text"
+								"value": "",
+								"type": "text",
+								"disabled": true
 							},
 							{
 								"key": "Content-Type",
-								"value": "image/jpeg",
+								"value": "image/png",
 								"type": "text"
 							}
 						],
 						"body": {
-							"mode": "formdata",
-							"formdata": [
-								{
-									"key": "image",
-									"value": "",
-									"type": "file"
-								}
-							]
+							"mode": "file",
+							"file": {
+								"src": "/Users/Werewolfe/Desktop/dashboard.png"
+							}
 						},
 						"url": {
-							"raw": "https://api.testwyre.com/v3/accounts/:accountId/:fieldId?timestamp={{timestamp}}",
+							"raw": "https://api.testwyre.com/v3/accounts/AC_YQG97JUANCF/individualGovernmentId?documentType=DRIVING_LICENSE&documentSubType=FRONT&timestamp={{timestamp}}",
 							"protocol": "https",
 							"host": [
 								"api",
@@ -622,34 +636,32 @@
 							"path": [
 								"v3",
 								"accounts",
-								":accountId",
-								":fieldId"
+								"AC_YQG97JUANCF",
+								"individualGovernmentId"
 							],
 							"query": [
 								{
-									"key": "timestamp",
-									"value": "{{timestamp}}"
-								}
-							],
-							"variable": [
-								{
-									"key": "accountId",
-									"value": "{{ACCOUNT_ID}}"
+									"key": "documentType",
+									"value": "DRIVING_LICENSE"
 								},
 								{
-									"key": "fieldId",
-									"value": "individualGovernmentId"
+									"key": "documentSubType",
+									"value": "FRONT"
+								},
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
 								}
 							]
 						}
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Payment Method Overview",
-			"description": null,
 			"item": [
 				{
 					"name": "ACH - Create Payment Method",
@@ -657,13 +669,16 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "288e85c6-997c-44bb-b648-020ba9b0bcad",
+								"id": "23ad1615-018e-4fb1-95a7-cd175b840a80",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"",
 									"",
 									"function calcAuthSigHash(url_body){",
@@ -673,10 +688,10 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v2/paymentMethods?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v2/paymentMethods?timestamp=${timestamp}`;",
 									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -687,7 +702,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "abb99e22-bd15-44a0-bea6-92bc518da26d",
+								"id": "d73cb358-a5f7-480d-b128-1bebc5f12435",
 								"exec": [
 									"pm.test(\"Should expect an id to return\", function() {",
 									"    let json = pm.response.json();",
@@ -751,15 +766,16 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "288e85c6-997c-44bb-b648-020ba9b0bcad",
+								"id": "43aa55ff-6223-4bee-9ecf-7b2b0e84c7cc",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"ACCOUNT_ID = postman.getEnvironmentVariable('ACCOUNT_ID');",
-									"publicToken = postman.getEnvironmentVariable('publicToken');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"",
 									"",
 									"function calcAuthSigHash(url_body){",
@@ -771,8 +787,8 @@
 									"function defineHeaders(){",
 									"    let url = \"https://api.testwyre.com/v2/paymentMethods?timestamp=\" + timestamp;",
 									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -783,7 +799,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "abb99e22-bd15-44a0-bea6-92bc518da26d",
+								"id": "5de885b4-4576-4184-a0a1-474adb59cd4d",
 								"exec": [
 									"pm.test(\"Should expect an id to return\", function() {",
 									"    let json = pm.response.json();",
@@ -847,14 +863,18 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "f0d7c69f-d958-467f-b3bd-26b067acc75a",
+								"id": "bb76bc4b-cbf9-43f0-bdd2-7b22f747390b",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"paymentId = postman.getEnvironmentVariable('paymentId');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('paymentId','PA_ALNAVCNCLAX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"paymentId = pm.environment.get('paymentId');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -863,15 +883,13 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v2/paymentMethod/\" + paymentId + \"?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v2/paymentMethod/${paymentId}?timestamp=${timestamp}`;",
 									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url));",
 									"}",
 									"",
-									"defineHeaders();",
-									"",
-									""
+									"defineHeaders();"
 								],
 								"type": "text/javascript"
 							}
@@ -891,33 +909,23 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
-							"raw": "https://api.testwyre.com/v2/paymentMethod/:paymentMethodId?timestamp={{timestamp}}",
+							"raw": "https://api.sendwyre.com/v2/paymentMethod/PA_Z4NP7E67PPM?timestamp={{timestamp}}",
 							"protocol": "https",
 							"host": [
 								"api",
-								"testwyre",
+								"sendwyre",
 								"com"
 							],
 							"path": [
 								"v2",
 								"paymentMethod",
-								":paymentMethodId"
+								"PA_Z4NP7E67PPM"
 							],
 							"query": [
 								{
 									"key": "timestamp",
 									"value": "{{timestamp}}"
-								}
-							],
-							"variable": [
-								{
-									"key": "paymentMethodId",
-									"value": "{{paymentId}}"
 								}
 							]
 						}
@@ -930,13 +938,16 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "ffc40d2e-832b-405e-8fc2-5a8ff0601065",
+								"id": "43656dd6-fa9e-4416-8a98-8191e0d40dbd",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -944,10 +955,10 @@
 									"}",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v2/paymentMethods?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v2/paymentMethods?timestamp=${timestamp}`;",
 									"",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -970,10 +981,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://api.testwyre.com/v2/paymentMethods?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -1003,13 +1010,16 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "34f87c08-5981-43ee-a82b-a80c88262e30",
+								"id": "ae2ddca1-4654-4451-a546-63b41e2b5b46",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"let WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"let WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"let deletePaymentId = 'PA_M4E3W3H39FA';",
 									"",
 									"function calcAuthSigHash(url_body){",
@@ -1018,10 +1028,10 @@
 									"}",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v2/paymentMethod/\" + deletePaymentId + \"?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v2/paymentMethod/${deletePaymentId}?timestamp=${timestamp}`;",
 									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -1070,7 +1080,7 @@
 							"variable": [
 								{
 									"key": "paymentMethodId",
-									"value": "PA_M4E3W3H39FA"
+									"value": ""
 								}
 							]
 						},
@@ -1084,14 +1094,14 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "9bf87116-41cc-4979-a454-ca06c3d49f20",
+								"id": "bea61b51-3372-45ee-a7d3-9d449a0d7ac2",
 								"exec": [
 									"let timestamp = new Date().getTime() + \"000\";",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"paymentId = postman.getEnvironmentVariable('paymentId');",
+									"pm.environment.set('timestamp', timestamp);",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"paymentId = pm.environment.get('paymentId');",
 									"",
 									"function calcAuthSigHash(url_body) {",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -1102,8 +1112,8 @@
 									"    let url = \"https://api.testwyre.com/v2/paymentMethod\" + \"/\" + paymentId + \"/attach?timestamp=\" + timestamp;",
 									"",
 									"    console.log(url);",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -1167,11 +1177,11 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Transfers and Exchanges",
-			"description": null,
 			"item": [
 				{
 					"name": "POST create_transfer",
@@ -1179,13 +1189,16 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "771c8346-ccbe-49e1-ad0c-d1d402829e60",
+								"id": "98b8e1f6-2905-44d0-bd2c-df720fb5d63d",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"let WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"let WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"",
 									"",
 									"function calcAuthSigHash(url_body){",
@@ -1195,10 +1208,10 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/transfers?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v3/transfers?timestamp=${timestamp}`;",
 									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -1209,7 +1222,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "3594971e-a166-495b-8dcb-b2409dc9aa5f",
+								"id": "c5667416-c233-4819-8cee-c2dd53e63af5",
 								"exec": [
 									"pm.test(\"Should expect an id to return\", function() {",
 									"    let json = pm.response.json();",
@@ -1279,15 +1292,18 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "69ef39cf-f3d3-449d-a489-198149b68c07",
-								"type": "text/javascript",
+								"id": "0f96f6db-dc2e-431f-b554-e2a541b314df",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"const transferId = postman.getEnvironmentVariable('transferId');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('transferId','TF_8DFAFFTPQVA');",
+									"",
+									"let WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"let WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"const transferId = pm.environment.get('transferId');",
 									"request.data = \"\";",
 									"",
 									"function calcAuthSigHash(url_body){",
@@ -1297,14 +1313,15 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/transfers/\" + transferId + \"/confirm?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v3/transfers/${transferId}/confirm?timestamp=${timestamp}`;",
 									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
-								]
+								],
+								"type": "text/javascript"
 							}
 						}
 					],
@@ -1351,7 +1368,7 @@
 							"variable": [
 								{
 									"key": "transferId",
-									"value": "{{transferId}}"
+									"value": ""
 								}
 							]
 						},
@@ -1365,14 +1382,18 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "02de4f9e-be2c-4d24-a89c-a2d239cae51c",
+								"id": "b3b7e348-8962-4a2a-b9e5-5b8e914160cc",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"const transferId = postman.getEnvironmentVariable('transferId');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('transferId','TF_8DFAFFTPQVA');",
+									"",
+									"let WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"let WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"const transferId = pm.environment.get('transferId');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -1383,8 +1404,8 @@
 									"function defineHeaders(){",
 									"    let url = \"https://api.testwyre.com/v3/transfers/\" + transferId + \"?timestamp=\" + timestamp;",
 									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -1407,10 +1428,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/transfers/:transferId?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -1446,15 +1463,16 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "31b3a6a2-ee4c-4efd-b78d-4cd2d0818a99",
+								"id": "895188c5-466e-4d46-aae7-dc60dd6dd4b1",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"accountId = postman.getEnvironmentVariable('ACCOUNT_ID');",
-									"paymentId = postman.getEnvironmentVariable('paymentId');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"let WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"let WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -1463,10 +1481,10 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v2/transfers?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v2/transfers?timestamp=${timestamp}`;",
 									"",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();",
@@ -1478,7 +1496,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "da947664-d7d0-4503-9df6-14be661aa109",
+								"id": "a17f2343-e2b0-4a4b-ac19-d0690fd7d196",
 								"exec": [
 									"pm.test(\"Should expect an id to return\", function() {",
 									"    let json = pm.response.json();",
@@ -1542,14 +1560,19 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "00fe2846-ef9f-4127-ad2f-e7de8b76f44f",
+								"id": "78e025e3-4ac1-4444-9dc8-d295de55a59a",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"const transferId = postman.getEnvironmentVariable('transferId');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('transferId','TF_8DFAFFTPQVA');",
+									"",
+									"let WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"let WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"",
+									"const transferId = pm.environment.get('transferId');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -1558,10 +1581,10 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v2/transfer/\" + transferId + \"?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v2/transfer/${transferId}?timestamp=${timestamp}`;",
 									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -1630,13 +1653,16 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "b7e7e882-8e16-420f-9c01-686d53a7b555",
+								"id": "d8ee8789-199f-47dd-aa30-b0c556cb1122",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"let WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"let WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -1645,10 +1671,10 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/transfers?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v3/transfers?timestamp=${timestamp}`;",
 									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -1671,10 +1697,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/transfers?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -1703,10 +1725,6 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/rates?pretty&as=priced",
 							"protocol": "https",
@@ -1740,14 +1758,16 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "d3cde146-366d-4d7d-bfb8-e757156e064b",
+								"id": "9a37d15e-f705-4611-b38d-1b27a9effd8d",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"accountId = postman.getEnvironmentVariable('ACCOUNT_ID');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"let WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"let WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -1756,10 +1776,10 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/limits?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v3/limits?timestamp=${timestamp}`;",
 									"",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url));",
 									"}",
 									"",
 									"defineHeaders();",
@@ -1783,10 +1803,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/limits?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -1816,14 +1832,16 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "d3cde146-366d-4d7d-bfb8-e757156e064b",
+								"id": "33b65b1f-1ec2-4bf4-b311-722b1e98e13f",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"accountId = postman.getEnvironmentVariable('ACCOUNT_ID');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"let WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"let WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -1832,10 +1850,10 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/limits?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v3/limits?timestamp=${timestamp}`;",
 									"",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url));",
 									"}",
 									"",
 									"defineHeaders();",
@@ -1859,10 +1877,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/limits?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -1886,11 +1900,11 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"protocolProfileBehavior": {}
 		},
 		{
 			"name": "Data Subscriptions",
-			"description": "Subscribing to data via webhooks",
 			"item": [
 				{
 					"name": "POST subscribe_to_a_webhook",
@@ -1898,13 +1912,16 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "81c0350d-8ec3-41bb-92f2-4ca5993a1f90",
+								"id": "e6fb1c16-d942-400e-b022-dfc72590a273",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"let WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"let WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -1913,10 +1930,10 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/subscriptions?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v3/subscriptions?timestamp=${timestamp}`;",
 									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url + request.data));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -1927,7 +1944,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "9b6bdf5a-1618-4044-ab45-e70faa88e610",
+								"id": "1d1a50ab-215c-4892-97a2-49d211f69db5",
 								"exec": [
 									"pm.test(\"Should expect an id to return\", function() {",
 									"    let json = pm.response.json();",
@@ -1990,14 +2007,17 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "3ee6d542-1f77-4788-8363-1d70888ea261",
+								"id": "76c76bd8-ac61-43e5-968e-54e9f367a8c2",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
-									"let webhookId = postman.getEnvironmentVariable('webhookId');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"let WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"let WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"let webhookId = pm.environment.get('webhookId');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -2006,10 +2026,10 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/subscriptions/\" + webhookId + \"?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v3/subscriptions/${webhookId}?timestamp=${timestamp}`;",
 									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -2020,7 +2040,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "99704191-0ba7-4ff5-8b26-a73b2abb27f9",
+								"id": "23063920-0bdd-4087-9ed4-fc17171f65f6",
 								"exec": [
 									"// pm.test(\"Should expect an id to return\", function() {",
 									"//     pm.environment.unset('webhookId');",
@@ -2084,13 +2104,16 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "3a8bd5d7-0dd3-4595-b083-f2b3d028bb54",
+								"id": "d6c99ab0-c6ca-4456-946f-6e212e1efe4c",
 								"exec": [
-									"let timestamp = new Date().getTime() + \"000\";",
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"postman.setEnvironmentVariable('timestamp', timestamp);",
-									"const WYRE_APIKEY = postman.getEnvironmentVariable('WYRE_APIKEY');",
-									"const WYRE_TOKEN = postman.getEnvironmentVariable('WYRE_TOKEN');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"let WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"let WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
 									"",
 									"function calcAuthSigHash(url_body){",
 									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
@@ -2099,10 +2122,10 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/subscriptions?timestamp=\" + timestamp;",
+									"    let url = `https://api.testwyre.com/v3/subscriptions?timestamp=${timestamp}`;",
 									"    ",
-									"    postman.setEnvironmentVariable('X-Api-Key',WYRE_APIKEY);",
-									"    postman.setEnvironmentVariable('signature', calcAuthSigHash(url));",
+									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url));",
 									"}",
 									"",
 									"defineHeaders();"
@@ -2125,10 +2148,6 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/subscriptions?timestamp={{timestamp}}",
 							"protocol": "https",
@@ -2151,14 +2170,602 @@
 					},
 					"response": []
 				}
-			]
+			],
+			"description": "Subscribing to data via webhooks",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Wallets",
+			"item": [
+				{
+					"name": "Create Wallet",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "54585ba2-5186-4675-8920-10601beed55c",
+								"exec": [
+									"let timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
+									"",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"",
+									"",
+									"function calcAuthSigHash(url_body){",
+									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
+									"    return CryptoJS.enc.Hex.stringify(hash);",
+									"}   ",
+									"",
+									"function defineHeaders(){",
+									"    let url = `https://api.testwyre.com/v2/wallets?timestamp=${timestamp}`; ",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
+									"}",
+									"",
+									"defineHeaders();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Api-Signature",
+								"value": "{{signature}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-API-Key",
+								"value": "{{WYRE_APIKEY}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\":\"random-uid-value-from-your-app-2\"}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://api.testwyre.com/v2/wallets?timestamp={{timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+								"v2",
+								"wallets"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Multiple Wallets",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "74cf6ac4-93cd-44b0-9f58-0a2f168a4f25",
+								"exec": [
+									"let timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
+									"",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"",
+									"",
+									"function calcAuthSigHash(url_body){",
+									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
+									"    return CryptoJS.enc.Hex.stringify(hash);",
+									"}   ",
+									"",
+									"function defineHeaders(){",
+									"    let url = `https://api.testwyre.com/v2/wallets/batch?timestamp=${timestamp}`; ",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
+									"}",
+									"",
+									"defineHeaders();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-API-Key",
+								"value": "{{WYRE_APIKEY}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Api-Signature",
+								"value": "{{signature}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"wallets\":[\n        {\"name\":\"randomId123\"},\n        {\"name\":\"randomId1234\"},\n        {\"name\":\"randomId12345\"}\n        ]\n}"
+						},
+						"url": {
+							"raw": "https://api.testwyre.com/v2/wallets/batch?timestamp={{timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+								"v2",
+								"wallets",
+								"batch"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Lookup Wallet",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "9ace8cd3-a23c-4e36-9f77-4055332df9ae",
+								"exec": [
+									"let timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
+									"",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"",
+									"",
+									"function calcAuthSigHash(url_body){",
+									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
+									"    return CryptoJS.enc.Hex.stringify(hash);",
+									"}   ",
+									"",
+									"function defineHeaders(){",
+									"    let url = `https://api.testwyre.com/v2/wallet/WA_7UVEPAN4W4Y?timestamp=${timestamp}`; ",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
+									"}",
+									"",
+									"defineHeaders();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Api-Key",
+								"value": "{{WYRE_APIKEY}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Api-Signature",
+								"value": "{{signature}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "https://api.testwyre.com/v2/wallet/WA_7UVEPAN4W4Y?timestamp={{timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+								"v2",
+								"wallet",
+								"WA_7UVEPAN4W4Y"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Wallet",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "cb218418-9663-40f5-b14c-d7d79b36b6a7",
+								"exec": [
+									"let timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
+									"",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"",
+									"",
+									"function calcAuthSigHash(url_body){",
+									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
+									"    return CryptoJS.enc.Hex.stringify(hash);",
+									"}   ",
+									"",
+									"function defineHeaders(){",
+									"    //Insert walletId to match URL request",
+									"    let url = `https://api.testwyre.com/v2/wallet/WA_7UVEPAN4W4Y/update?timestamp=${timestamp}`; ",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
+									"}",
+									"",
+									"defineHeaders();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Api-Key",
+								"value": "{{WYRE_APIKEY}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Api-Signature",
+								"value": "{{signature}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\":\"random-uid-value-from-your-app-222\"}"
+						},
+						"url": {
+							"raw": "https://api.testwyre.com/v2/wallet/:walletId/update?timestamp={{timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+								"v2",
+								"wallet",
+								":walletId",
+								"update"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							],
+							"variable": [
+								{
+									"key": "walletId",
+									"value": "WA_7UVEPAN4W4Y"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Wallet",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "23f4e13e-2793-4981-b010-54e01495d1ac",
+								"exec": [
+									"let timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
+									"",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"",
+									"",
+									"function calcAuthSigHash(url_body){",
+									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
+									"    return CryptoJS.enc.Hex.stringify(hash);",
+									"}   ",
+									"",
+									"function defineHeaders(){",
+									"    //Insert walletId to match URL request",
+									"    let url = `https://api.testwyre.com/v2/wallet/WA_7UVEPAN4W4Y?timestamp=${timestamp}`; ",
+									"    pm.environment.set('signature', calcAuthSigHash(url));",
+									"}",
+									"",
+									"defineHeaders();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "X-Api-Key",
+								"value": "{{WYRE_APIKEY}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Api-Signature",
+								"value": "{{signature}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://api.testwyre.com/v2/wallet/WA_7UVEPAN4W4Y?timestamp={{timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+								"v2",
+								"wallet",
+								"WA_7UVEPAN4W4Y"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List All Wallets",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a30c62cb-7e55-4a48-bb62-bfa1dbb45909",
+								"exec": [
+									"let timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
+									"",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXX-XXXXXX-XXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK--XXXXXX-XXXXXX-XXXXXX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"",
+									"",
+									"function calcAuthSigHash(url_body){",
+									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
+									"    return CryptoJS.enc.Hex.stringify(hash);",
+									"}   ",
+									"",
+									"function defineHeaders(){",
+									"    let url = `https://api.testwyre.com/v2/wallets?timestamp=${timestamp}`; ",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
+									"}",
+									"",
+									"defineHeaders();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "X-Api-Key",
+								"value": "{{WYRE_APIKEY}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Api-Signature",
+								"value": "{{signature}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "https://api.testwyre.com/v2/wallets?timestamp={{timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+								"v2",
+								"wallets"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Wallet Order Reservation",
+			"item": [
+				{
+					"name": "Create Reservation",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "9d1a0cb7-2bc9-4686-80c8-86ef1e749a21",
+								"exec": [
+									"let timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
+									"",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXX-XXXXXX-XXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXX-XXXXXX-XXXXXX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"",
+									"",
+									"function calcAuthSigHash(url_body){",
+									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
+									"    return CryptoJS.enc.Hex.stringify(hash);",
+									"}   ",
+									"",
+									"function defineHeaders(){",
+									"    let url = `https://api.testwyre.com/v3/orders/reserve?timestamp=${timestamp}`; ",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
+									"}",
+									"",
+									"defineHeaders();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "X-Api-Key",
+								"value": "{{WYRE_APIKEY}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Api-Signature",
+								"value": "{{signature}}",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n      \"sourceAmount\": \"10\",\n      \"paymentMethod\": \"debit-card\",\n      \"amountIncludeFees\": true, \n      \"sourceCurrency\": \"USD\",\n      \"destCurrency\": \"ETH\",\n      \"redirectUrl\": \"https://www.sendeyre.com\",\n      \"failureRedirectUrl\": \"https://www.sendwyre.com\",\n      \"referrerAccountId\": \"YOUR_ACCOUNT_ID\",\n      \"dest\": \"ethereum:0x9E01E0E60dF079136a7a1d4ed97d709D5Fe3e341\",\n      \"country\": \"US\"\n  }"
+						},
+						"url": {
+							"raw": "https://api.testwyre.com/v3/orders/reserve?timestamp={{timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+								"v3",
+								"orders",
+								"reserve"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "62620a01-160b-434a-8233-1887099207c8",
+				"id": "201446f3-d823-46ea-9856-25f8d4722ef2",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -2168,12 +2775,13 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "c6859746-8584-4178-8105-d7e9f529103c",
+				"id": "92b0c32b-2932-45b0-92fc-01e32baf3bb1",
 				"type": "text/javascript",
 				"exec": [
 					""
 				]
 			}
 		}
-	]
+	],
+	"protocolProfileBehavior": {}
 }
