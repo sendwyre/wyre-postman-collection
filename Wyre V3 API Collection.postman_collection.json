@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "cc33ba56-ec6a-47e1-a05d-cc5cc671ffe3",
-		"name": "Wyre V3 API Collection",
+		"_postman_id": "4c6b5467-35af-4dfe-a2c1-b04cbd91c75b",
+		"name": "Wyre V3 API Collection Copy 2",
 		"description": "Collection of Wyre V3 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -13,9 +13,25 @@
 					"name": "POST Submit Auth Token",
 					"event": [
 						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Should expect an id to return\", function() {",
+									"    let json = pm.response.json();",
+									"    // pm.environment.set('newApiKeys', json['apiKey']);",
+									"    console.log(json['apiKey']);",
+									"    pm.environment.set('WYRE_APIKEY', json['apiKey']);",
+									"});",
+									""
+								],
+								"id": "35c0d62e-d79a-49c4-8995-eb7e003df3ba"
+							}
+						},
+						{
 							"listen": "prerequest",
 							"script": {
-								"id": "ca73cbf8-b90d-44b2-b75f-44a921c8067a",
+								"type": "text/javascript",
 								"exec": [
 									"function createSecretKey(){",
 									"    let date = Date.now();",
@@ -34,23 +50,7 @@
 									"",
 									"createSecretKey();"
 								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"id": "a0ff5e08-408e-4332-b02a-1a03df135338",
-								"exec": [
-									"pm.test(\"Should expect an id to return\", function() {",
-									"    let json = pm.response.json();",
-									"    // pm.environment.set('newApiKeys', json['apiKey']);",
-									"    console.log(json['apiKey']);",
-									"    pm.environment.set('WYRE_APIKEY', json['apiKey']);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
+								"id": "7b3326c3-a1e6-4b31-9848-34c661e39ffa"
 							}
 						}
 					],
@@ -90,9 +90,23 @@
 					"name": "POST create an API key",
 					"event": [
 						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Should expect an id to return\", function() {",
+									"    let json = pm.response.json();",
+									"    pm.environment.set('newApiKeys', json['apiKey']);",
+									"});",
+									""
+								],
+								"id": "14cc35b6-fe78-4497-981f-71818b05c29d"
+							}
+						},
+						{
 							"listen": "prerequest",
 							"script": {
-								"id": "65814dc2-3308-4fa4-8e12-81fef661f726",
+								"type": "text/javascript",
 								"exec": [
 									"let timestamp = Date.now();",
 									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
@@ -117,21 +131,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"id": "2a71d1bc-0719-48a9-b499-ce79fe2699b3",
-								"exec": [
-									"pm.test(\"Should expect an id to return\", function() {",
-									"    let json = pm.response.json();",
-									"    pm.environment.set('newApiKeys', json['apiKey']);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
+								"id": "4646177d-a73e-4469-aed8-f4d0d54b402c"
 							}
 						}
 					],
@@ -187,7 +187,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "d88caa05-63d6-4da5-a6c4-f21f608a3a08",
+								"type": "text/javascript",
 								"exec": [
 									"let timestamp = Date.now();",
 									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
@@ -216,7 +216,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "fe099356-caea-4d84-aaee-7e3bc1d436f6"
 							}
 						}
 					],
@@ -268,14 +268,14 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "4ca2b5b8-cc55-4895-904e-4c0f008b8665",
+								"id": "73795655-a027-41df-abb9-6815d2f68fa2",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
 									"",
 									"pm.environment.set('ACCOUNT_ID', 'AC_239EMR3PYAP');",
-									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
-									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXX-XXXXXX-XXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXX-XXXXXX-XXXXXX');",
 									"",
 									"let accountId = pm.environment.get('ACCOUNT_ID');",
 									"let WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
@@ -300,7 +300,7 @@
 						{
 							"listen": "test",
 							"script": {
-								"id": "64cc6a9f-7fee-45b8-a568-8f0a5937daa6",
+								"id": "98fb0afd-7a18-4b96-ab85-1a58616fa34a",
 								"exec": [
 									"pm.test(\"response is okay\", function() {",
 									"   pm.response.to.have.status(200); ",
@@ -331,9 +331,6 @@
 						"disableBodyPruning": true
 					},
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "GET",
 						"header": [
 							{
@@ -392,13 +389,13 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "39b27bb1-84d6-4768-ac86-39a23211bd6b",
+								"id": "a5ec059d-39a2-443b-9990-134b3d9d6efc",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"pm.environment.set('WYRE_APIKEY','AK-XXXXXX-XXXXXXXX-XXXXXXXX');",
-									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXX-XXXXXX-XXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXX-XXXXXX-XXXXXX');",
 									"",
 									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
 									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
@@ -484,7 +481,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "93879a1f-2095-49f5-8fbe-5e15f39ca04f",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -510,7 +507,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "20ef5b0a-52bd-4e2f-b073-4fe3557a5623"
 							}
 						}
 					],
@@ -573,7 +570,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "0d0e32a6-8a52-49f4-adc1-316d16704802",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -584,7 +581,7 @@
 									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
 									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');"
 								],
-								"type": "text/javascript"
+								"id": "8445bc43-945a-481f-9a6b-adbb64dc65cd"
 							}
 						}
 					],
@@ -667,9 +664,23 @@
 					"name": "ACH - Create Payment Method",
 					"event": [
 						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Should expect an id to return\", function() {",
+									"    let json = pm.response.json();",
+									"    pm.environment.set('paymentId', json['id']);",
+									"});",
+									""
+								],
+								"id": "6d2f2a57-e503-4750-8261-933b548fa209"
+							}
+						},
+						{
 							"listen": "prerequest",
 							"script": {
-								"id": "23ad1615-018e-4fb1-95a7-cd175b840a80",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -696,21 +707,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"id": "d73cb358-a5f7-480d-b128-1bebc5f12435",
-								"exec": [
-									"pm.test(\"Should expect an id to return\", function() {",
-									"    let json = pm.response.json();",
-									"    pm.environment.set('paymentId', json['id']);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
+								"id": "c93b05f4-4466-4bf6-9a4d-0b83482fa2db"
 							}
 						}
 					],
@@ -764,9 +761,23 @@
 					"name": "ACH - Create Payment Method Wire Transfer",
 					"event": [
 						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Should expect an id to return\", function() {",
+									"    let json = pm.response.json();",
+									"    pm.environment.set('paymentId', json['id']);",
+									"});",
+									""
+								],
+								"id": "cf0e0457-dc90-4c92-bac6-a1ba02d647cd"
+							}
+						},
+						{
 							"listen": "prerequest",
 							"script": {
-								"id": "43aa55ff-6223-4bee-9ecf-7b2b0e84c7cc",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -793,21 +804,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"id": "5de885b4-4576-4184-a0a1-474adb59cd4d",
-								"exec": [
-									"pm.test(\"Should expect an id to return\", function() {",
-									"    let json = pm.response.json();",
-									"    pm.environment.set('paymentId', json['id']);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
+								"id": "460c9b50-6089-457c-961e-005670963d06"
 							}
 						}
 					],
@@ -863,7 +860,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "bb76bc4b-cbf9-43f0-bdd2-7b22f747390b",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -891,7 +888,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "83adf1ad-2090-404c-8eed-7ebbb74f5ff7"
 							}
 						}
 					],
@@ -938,7 +935,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "43656dd6-fa9e-4416-8a98-8191e0d40dbd",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -963,7 +960,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "4d77579d-b2d9-4665-af52-6667854d537a"
 							}
 						}
 					],
@@ -1010,7 +1007,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "ae2ddca1-4654-4451-a546-63b41e2b5b46",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -1036,7 +1033,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "5eadcb2c-80d0-4ba5-b99e-ab60f8126a0a"
 							}
 						}
 					],
@@ -1094,7 +1091,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "bea61b51-3372-45ee-a7d3-9d449a0d7ac2",
+								"type": "text/javascript",
 								"exec": [
 									"let timestamp = new Date().getTime() + \"000\";",
 									"",
@@ -1118,7 +1115,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "9d3a78fd-8b63-452b-8db4-6fe60ef45e48"
 							}
 						}
 					],
@@ -1187,9 +1184,23 @@
 					"name": "POST create_transfer",
 					"event": [
 						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Should expect an id to return\", function() {",
+									"    let json = pm.response.json();",
+									"    pm.environment.set('transferId', json['id']);",
+									"});",
+									""
+								],
+								"id": "bbe8c089-33fa-4442-b675-91d4590e3483"
+							}
+						},
+						{
 							"listen": "prerequest",
 							"script": {
-								"id": "98b8e1f6-2905-44d0-bd2c-df720fb5d63d",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -1216,21 +1227,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"id": "c5667416-c233-4819-8cee-c2dd53e63af5",
-								"exec": [
-									"pm.test(\"Should expect an id to return\", function() {",
-									"    let json = pm.response.json();",
-									"    pm.environment.set('transferId', json['id']);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
+								"id": "e9e3e740-b578-4587-81cd-a2e7a9766a34"
 							}
 						}
 					],
@@ -1292,7 +1289,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "0f96f6db-dc2e-431f-b554-e2a541b314df",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -1321,7 +1318,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "045021cf-12a3-4e5f-bcf3-631b6cecabe0"
 							}
 						}
 					],
@@ -1382,14 +1379,14 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "b3b7e348-8962-4a2a-b9e5-5b8e914160cc",
+								"id": "cb14668d-edd9-4f53-9dcf-b7bfd9e46134",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
 									"",
-									"pm.environment.set('WYRE_APIKEY','AK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
-									"pm.environment.set('WYRE_TOKEN','SK-XXXXXXXX-XXXXXXXX-XXXXXXXX');",
-									"pm.environment.set('transferId','TF_8DFAFFTPQVA');",
+									"pm.environment.set('WYRE_APIKEY','AK-3GD7Z4WR-WZ36RANX-CZ6LMVVV-YUXGHD9M');",
+									"pm.environment.set('WYRE_TOKEN','SK-JQJVFXJW-XAF3AL3A-8C32XW6E-FPWCRVTZ');",
+									"pm.environment.set('transferId','TF_TXHEVEHTXFF');",
 									"",
 									"let WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
 									"let WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
@@ -1402,7 +1399,7 @@
 									"",
 									"",
 									"function defineHeaders(){",
-									"    let url = \"https://api.testwyre.com/v3/transfers/\" + transferId + \"?timestamp=\" + timestamp;",
+									"    let url = \"https://api.sendwyre.com/v3/transfers/\" + \"TF_TXHEVEHTXFF\" + \"?timestamp=\" + timestamp;",
 									"    ",
 									"    pm.environment.set('X-Api-Key',WYRE_APIKEY);",
 									"    pm.environment.set('signature', calcAuthSigHash(url));",
@@ -1429,28 +1426,22 @@
 							}
 						],
 						"url": {
-							"raw": "https://api.testwyre.com/v3/transfers/:transferId?timestamp={{timestamp}}",
+							"raw": "https://api.sendwyre.com/v3/transfers/TF_TXHEVEHTXFF?timestamp={{timestamp}}",
 							"protocol": "https",
 							"host": [
 								"api",
-								"testwyre",
+								"sendwyre",
 								"com"
 							],
 							"path": [
 								"v3",
 								"transfers",
-								":transferId"
+								"TF_TXHEVEHTXFF"
 							],
 							"query": [
 								{
 									"key": "timestamp",
 									"value": "{{timestamp}}"
-								}
-							],
-							"variable": [
-								{
-									"key": "transferId",
-									"value": "{{transferId}}"
 								}
 							]
 						}
@@ -1461,9 +1452,23 @@
 					"name": "POST create wire transfer",
 					"event": [
 						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Should expect an id to return\", function() {",
+									"    let json = pm.response.json();",
+									"    pm.environment.set('transferId', json['id']);",
+									"});",
+									""
+								],
+								"id": "25cfe304-bc85-402a-9fea-58ee0581adb3"
+							}
+						},
+						{
 							"listen": "prerequest",
 							"script": {
-								"id": "895188c5-466e-4d46-aae7-dc60dd6dd4b1",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -1490,21 +1495,7 @@
 									"defineHeaders();",
 									""
 								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"id": "a17f2343-e2b0-4a4b-ac19-d0690fd7d196",
-								"exec": [
-									"pm.test(\"Should expect an id to return\", function() {",
-									"    let json = pm.response.json();",
-									"    pm.environment.set('transferId', json['id']);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
+								"id": "53db06a5-d5fc-47ba-9145-0b90222340b3"
 							}
 						}
 					],
@@ -1560,7 +1551,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "78e025e3-4ac1-4444-9dc8-d295de55a59a",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -1589,7 +1580,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "33411681-5152-4e5b-a244-4f911e529852"
 							}
 						}
 					],
@@ -1653,7 +1644,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "d8ee8789-199f-47dd-aa30-b0c556cb1122",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -1679,7 +1670,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "cc2d991e-a015-4050-960e-b5abe8f74f95"
 							}
 						}
 					],
@@ -1758,7 +1749,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "9a37d15e-f705-4611-b38d-1b27a9effd8d",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -1785,7 +1776,7 @@
 									"defineHeaders();",
 									""
 								],
-								"type": "text/javascript"
+								"id": "574544b4-4680-469c-aa9a-01d35c7d8dd4"
 							}
 						}
 					],
@@ -1832,7 +1823,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "33b65b1f-1ec2-4bf4-b311-722b1e98e13f",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -1859,7 +1850,7 @@
 									"defineHeaders();",
 									""
 								],
-								"type": "text/javascript"
+								"id": "69df2700-9af8-4cda-a91c-0b0b48787f0a"
 							}
 						}
 					],
@@ -1910,9 +1901,22 @@
 					"name": "POST subscribe_to_a_webhook",
 					"event": [
 						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"pm.test(\"Should expect an id to return\", function() {",
+									"    let json = pm.response.json();",
+									"    pm.environment.set('webhookId', json['id']);",
+									"});"
+								],
+								"id": "36439e46-247e-42c9-b587-b52b38ab7f3f"
+							}
+						},
+						{
 							"listen": "prerequest",
 							"script": {
-								"id": "e6fb1c16-d942-400e-b022-dfc72590a273",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -1938,20 +1942,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"id": "1d1a50ab-215c-4892-97a2-49d211f69db5",
-								"exec": [
-									"pm.test(\"Should expect an id to return\", function() {",
-									"    let json = pm.response.json();",
-									"    pm.environment.set('webhookId', json['id']);",
-									"});"
-								],
-								"type": "text/javascript"
+								"id": "1d872e9a-8e01-4bb8-a11c-a8933106c9af"
 							}
 						}
 					],
@@ -2005,9 +1996,21 @@
 					"name": "DELETE webhook",
 					"event": [
 						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									"// pm.test(\"Should expect an id to return\", function() {",
+									"//     pm.environment.unset('webhookId');",
+									"// });"
+								],
+								"id": "57786dfe-3db2-4a1e-b7f2-772b4f76d8ae"
+							}
+						},
+						{
 							"listen": "prerequest",
 							"script": {
-								"id": "76c76bd8-ac61-43e5-968e-54e9f367a8c2",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -2034,19 +2037,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"id": "23063920-0bdd-4087-9ed4-fc17171f65f6",
-								"exec": [
-									"// pm.test(\"Should expect an id to return\", function() {",
-									"//     pm.environment.unset('webhookId');",
-									"// });"
-								],
-								"type": "text/javascript"
+								"id": "8efc5383-e018-4b6e-be1a-22c73dda1d46"
 							}
 						}
 					],
@@ -2104,7 +2095,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "d6c99ab0-c6ca-4456-946f-6e212e1efe4c",
+								"type": "text/javascript",
 								"exec": [
 									"const timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -2130,7 +2121,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "a81ba897-65b1-41bf-8266-60f8a2d64be9"
 							}
 						}
 					],
@@ -2183,7 +2174,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "54585ba2-5186-4675-8920-10601beed55c",
+								"type": "text/javascript",
 								"exec": [
 									"let timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -2207,7 +2198,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "cfcdeac5-641d-48bb-b3d4-18f2548eedca"
 							}
 						}
 					],
@@ -2267,7 +2258,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "74cf6ac4-93cd-44b0-9f58-0a2f168a4f25",
+								"type": "text/javascript",
 								"exec": [
 									"let timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -2291,7 +2282,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "a877a257-523c-4195-b139-2d39c4de9b9e"
 							}
 						}
 					],
@@ -2347,7 +2338,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "9ace8cd3-a23c-4e36-9f77-4055332df9ae",
+								"type": "text/javascript",
 								"exec": [
 									"let timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -2371,7 +2362,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "9f6b188b-6e5e-42e2-aed0-9d3c256d9697"
 							}
 						}
 					],
@@ -2430,7 +2421,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "cb218418-9663-40f5-b14c-d7d79b36b6a7",
+								"type": "text/javascript",
 								"exec": [
 									"let timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -2455,7 +2446,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "a54eb098-353c-494b-8224-bcae9d362537"
 							}
 						}
 					],
@@ -2518,7 +2509,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "23f4e13e-2793-4981-b010-54e01495d1ac",
+								"type": "text/javascript",
 								"exec": [
 									"let timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -2543,7 +2534,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "a66ce726-8daf-486f-bc32-f8cbdcbe4bc8"
 							}
 						}
 					],
@@ -2595,7 +2586,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "a30c62cb-7e55-4a48-bb62-bfa1dbb45909",
+								"type": "text/javascript",
 								"exec": [
 									"let timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -2619,7 +2610,7 @@
 									"",
 									"defineHeaders();"
 								],
-								"type": "text/javascript"
+								"id": "0bbd8c10-87bf-4b01-9f93-2477e304182f"
 							}
 						}
 					],
@@ -2683,7 +2674,7 @@
 						{
 							"listen": "prerequest",
 							"script": {
-								"id": "9d1a0cb7-2bc9-4686-80c8-86ef1e749a21",
+								"id": "5b745313-d7c7-4213-a146-37f8999abeb5",
 								"exec": [
 									"let timestamp = Date.now();",
 									"pm.globals.set('timestamp', timestamp);",
@@ -2732,7 +2723,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n      \"sourceAmount\": \"10\",\n      \"paymentMethod\": \"debit-card\",\n      \"amountIncludeFees\": true, \n      \"sourceCurrency\": \"USD\",\n      \"destCurrency\": \"ETH\",\n      \"redirectUrl\": \"https://www.sendeyre.com\",\n      \"failureRedirectUrl\": \"https://www.sendwyre.com\",\n      \"referrerAccountId\": \"YOUR_ACCOUNT_ID\",\n      \"dest\": \"ethereum:0x9E01E0E60dF079136a7a1d4ed97d709D5Fe3e341\",\n      \"country\": \"US\"\n  }"
+							"raw": "{\n      \"sourceAmount\": \"10\",\n      \"paymentMethod\": \"debit-card\",\n      \"amountIncludeFees\": true, \n      \"sourceCurrency\": \"USD\",\n      \"destCurrency\": \"BTC\",\n      \"redirectUrl\": \"https://www.sendwyre.com\",\n      \"failureRedirectUrl\": \"https://www.shapeshift.com\",\n      \"referrerAccountId\": \"AC_Y22RAQXEYV6\",\n      \"dest\": \"bitcoin:tb1q6yn0ajs733xsk25vefrhwjey4629qt9c67y6ma\",\n      \"country\": \"US\"\n  }"
 						},
 						"url": {
 							"raw": "https://api.testwyre.com/v3/orders/reserve?timestamp={{timestamp}}",
@@ -2759,13 +2750,186 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Card Processing",
+			"item": [
+				{
+					"name": "Create Order",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f8565ba9-5307-4ce7-b4db-b21bcc1afd59",
+								"exec": [
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
+									"",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXX-XXXXXX-XXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXX-XXXXXX-XXXXXX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"",
+									"",
+									"function calcAuthSigHash(url_body){",
+									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
+									"    return CryptoJS.enc.Hex.stringify(hash);",
+									"}",
+									"",
+									"function defineHeaders(){",
+									"    let url = `https://api.testwyre.com/v3/debitcard/process/partner?timestamp=${timestamp}`;",
+									"    pm.environment.set('X-Api-Key', WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
+									"}",
+									"",
+									"defineHeaders();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-Api-Key",
+								"value": "{{WYRE_APIKEY}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Api-Signature",
+								"value": "{{signature}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"debitCard\":{\n      \"number\":\"4111111111111111\",\n      \"year\":\"2023\",\n      \"month\":\"01\",\n      \"cvv\":\"123\"\n   },\n   \"reservationId\":\"9BTU8777E4YXFMRCYBTM\",\n   \"amount\":\"10\",\n   \"sourceCurrency\":\"USD\",\n   \"destCurrency\":\"BTC\",\n   \"dest\":\"bitcoin:tb1q6yn0ajs733xsk25vefrhwjey4629qt9c67y6ma\",\n   \"referrerAccountId\":\"AC_Y22RAQXEYV6\", \n   \"givenName\":\"Adam\",\n   \"familyName\":\"Wolfe\",\n   \"email\":\"test.wyre@sendwyre.com\",\n   \"phone\":\"+18588299156\",\n    \"referenceId\": \"AC_Y22RAQXEYV6\",\n   \"address\":{\n      \"street1\":\"1234 Test Ave\",\n      \"city\":\"Los Angeles\",\n      \"state\":\"CA\",\n      \"postalCode\":\"91423\",\n      \"country\":\"US\"\n   }\n}"
+						},
+						"url": {
+							"raw": "https://api.testwyre.com/v3/debitcard/process/partner?timestamp={{timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+								"v3",
+								"debitcard",
+								"process",
+								"partner"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "authorize",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "9dd5738e-b78a-4938-b96b-1a7d075efb90",
+								"exec": [
+									"const timestamp = Date.now();",
+									"pm.globals.set('timestamp', timestamp);",
+									"",
+									"pm.environment.set('WYRE_APIKEY','AK-XXXXXX-XXXXXX-XXXXXX');",
+									"pm.environment.set('WYRE_TOKEN','SK-XXXXXX-XXXXXX-XXXXXX');",
+									"",
+									"WYRE_APIKEY = pm.environment.get('WYRE_APIKEY');",
+									"WYRE_TOKEN = pm.environment.get('WYRE_TOKEN');",
+									"",
+									"",
+									"function calcAuthSigHash(url_body){",
+									"    let hash = CryptoJS.HmacSHA256(url_body, WYRE_TOKEN);",
+									"    return CryptoJS.enc.Hex.stringify(hash);",
+									"}",
+									"",
+									"function defineHeaders(){",
+									"    let url = `https://api.testwyre.com/v3/debitcard/authorization/WO_YFVZF4EGGB?timestamp=${timestamp}`;",
+									"    pm.environment.set('X-Api-Key', WYRE_APIKEY);",
+									"    pm.environment.set('signature', calcAuthSigHash(url + request.data));",
+									"}",
+									"",
+									"defineHeaders();"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "X-Api-Key",
+								"value": "{{WYRE_APIKEY}}",
+								"type": "text"
+							},
+							{
+								"key": "X-Api-Signature",
+								"value": "{{signature}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}"
+						},
+						"url": {
+							"raw": "https://api.testwyre.com/v3/debitcard/authorization/WO_YFVZF4EGGB?timestamp={{timestamp}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"testwyre",
+								"com"
+							],
+							"path": [
+								"v3",
+								"debitcard",
+								"authorization",
+								"WO_YFVZF4EGGB"
+							],
+							"query": [
+								{
+									"key": "timestamp",
+									"value": "{{timestamp}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"event": [
 		{
 			"listen": "prerequest",
 			"script": {
-				"id": "201446f3-d823-46ea-9856-25f8d4722ef2",
+				"id": "671874ef-4a32-4d35-8f6f-6bc8d13a5f79",
 				"type": "text/javascript",
 				"exec": [
 					""
@@ -2775,7 +2939,7 @@
 		{
 			"listen": "test",
 			"script": {
-				"id": "92b0c32b-2932-45b0-92fc-01e32baf3bb1",
+				"id": "ff0da2c2-9224-473d-98f7-3007b70691f1",
 				"type": "text/javascript",
 				"exec": [
 					""
