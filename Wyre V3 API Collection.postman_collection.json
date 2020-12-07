@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "4c6b5467-35af-4dfe-a2c1-b04cbd91c75b",
-		"name": "Wyre V3 API Collection Copy 2",
+		"name": "Wyre V3 API Collection",
 		"description": "Collection of Wyre V3 API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
